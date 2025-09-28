@@ -1,4 +1,4 @@
-let given = "apple";
+let given = "butterflies";
 let vowelConsonentWord = "ape,p,l";
 let concat = "";
 function isVowel(index) {
@@ -19,19 +19,37 @@ function isVowel(index) {
   }
   return false;
 }
-for (let index = 0; index < given.length; index++) {
-  for (let count = index; count < given.length; count++) {
-    if (isVowel(index) === true) {
-      concat = concat + given[index];
-      console.log(concat);
-      index++;
-      for (let count2 = index; count2 < given.length; count2++) {
-        if (isVowel(index) === false) {
-          concat = concat + given[index];
-          console.log(concat);
-          index++;
-          break;
-        }
+let flag1 = 0;
+if (isVowel(0) === true) {
+  concat = concat + given[0];
+  for (let count = 1; count < given.length; count++) {
+    if (isVowel(count - 1) === true) {
+      if (isVowel(count) === false) {
+        concat = concat + given[count];
+        console.log(concat);
+        count++;
+      }
+    }
+    if (isVowel(count - 1) === false) {
+      if (isVowel(count) === true) {
+        concat = concat + given[count];
+      }
+    }
+  }
+}
+if (isVowel(0) === false) {
+  concat = concat + given[0];
+  for (let count = 1; count < given.length; count++) {
+    if (isVowel(count - 1) === false) {
+      if (isVowel(count) === true) {
+        concat = concat + given[count];
+        console.log(concat);
+        count++;
+      }
+    }
+    if (isVowel(count - 1) === true) {
+      if (isVowel(count) === false) {
+        concat = concat + given[count];
       }
     }
   }
