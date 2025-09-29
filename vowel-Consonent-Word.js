@@ -1,6 +1,7 @@
 function vowelConsonentWord(given) {
-
   let concat = "";
+  let flag = 0;
+
   function isVowel(index) {
     if (given[index] === 'a') {
       return true;
@@ -44,31 +45,33 @@ function vowelConsonentWord(given) {
           concat = concat + given[count];
           console.log(concat);
           count++;
+          if (count === given.length) {
+            flag = 1;
+          }
         }
       }
-      if (isVowel(count - 1) === true) {
+      if (isVowel(count - 1) === true && flag === 0) {
         if (isVowel(count) === false) {
           concat = concat + given[count];
         }
       }
     }
   }
-  function calOtherWords(concat, input) {
-    let str = "";
-    let cIndex = 0;
-    for (let index = 0; index < input.length; index++) {
-      if (input[index] !== concat[cIndex]) {
-        str = str + "," + input[index];
-      }
-      else {
-        cIndex++;
-      }
-    }
-    return str;
-
-  }
-
   return concat + calOtherWords(concat, given);
+}
+function calOtherWords(concat, input) {
+  let str = "";
+  let cIndex = 0;
+  for (let index = 0; index < input.length; index++) {
+    if (input[index] !== concat[cIndex]) {
+      str = str + "," + input[index];
+    }
+    else {
+      cIndex++;
+    }
+  }
+  return str;
+
 }
 function printing(expected, actual) {
   const mark = (actual === expected) ? "✅" : "❌";
@@ -76,11 +79,11 @@ function printing(expected, actual) {
 }
 function testCases() {
   let string1 = "butterflies";
-  let string2 = "japanese";
+  let string2 = "bapaneseb";
   let string3 = "apple";
   let string4 = "opportunities"
   printing("buteris,t,f,l,e", vowelConsonentWord(string1));
-  printing("japanese", vowelConsonentWord(string2));
+  printing("bapaneseb", vowelConsonentWord(string2));
   printing("ape,p,l", vowelConsonentWord(string3));
   printing("oporunitis,p,t,e", vowelConsonentWord(string4));
 }
