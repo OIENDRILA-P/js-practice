@@ -1,24 +1,17 @@
-
-
-function invalidChoiceCheck(userGuess, invalidChoice, index) {
-  for (let i = 0; i < invalidChoice.length; i++) {
-    if (userGuess[index] === invalidChoice[i]) {
-      return true;
+function hint(secretMessage, decodedMessage) {
+  secretMessage = secretMessage.join("").padStart(secretMessage.length + 1, " ");
+  secretMessage = secretMessage.split("");
+  for (let index = 0; index < secretMessage.length; index++) {
+    if (secretMessage[index] === " ") {
+      secretMessage[index + 1] = decodedMessage[index];
     }
   }
+  return secretMessage;
 }
 
-function displayInvalid(userGuess, secretMessage, message) {
-  if (userGuess.length !== secretMessage.length) {
-    return console.log("Invalid entry of sentence");
-  }
-  const invalidChoice = "123467890[];?/\|,+=_-)(*&^%$#@!~`".split("");
-  for (let index = 0; index < invalidChoice.length; index++) {
-    if (invalidChoiceCheck(userGuess, invalidChoice, index)) {
-      return console.log("Invalid entry of sentence");
-    }
-  }
-  return true;
+function isEntered5(guessArray) {
+  const guess = parseInt(guessArray);
+  return guess === 5;
 }
 
 function crossChecking(arrayOfCon) {
@@ -63,22 +56,25 @@ function encodingString(arrayOfLines, encodedAlphabets, alphabets) {
 function instructions() {
   console.log("\n\n\n\t\t\tWELCOME TO THE WORLD OF ENCODING AND DECODING\t\t\t\n\n\n");
   console.log("Rule 1: You will be given 10 chances to decode the sentence correctly.\n");
-  console.log("Rule 2: The vowels and spaces will be in corect position.\n");
+  console.log("Rule 2: The vowels and spaces will be in correct position.\n");
   console.log("Rule 3: You can ask for only one hint, but you will be discarded from scoring BONUS.\n");
   console.log("Rule 4: The Hint will reveal only the first letter of each word");
   console.log("Rule 5: Enter 5 to get HINT");
 }
+
 function userGuess() {
-  const guess = prompt("Enter your guess :\n").toLowerCase().split("");
+  const guess = prompt("Enter your guess:").toLowerCase().split("");
   return guess;
 }
 
 function secretMessage() {
-  const arrayOfLines = ["there are eight planets excluding pluto.", "Life first emerged in the ancient oceans as simple, self-replicating molecules."
-    , "A swirling disk of gas and dust gave rise to our planet and its celestial companions."
-    , "The age of the dinosaurs ended suddenly after a major impact from a celestial object."];
+  const arrayOfLines = ["there are eight planets excluding pluto", "Life first emerged in the ancient oceans as simple selfreplicating molecules"
+    , "A swirling disk of gas and dust gave rise to our planet and its celestial companions"
+    , "The age of the dinosaurs ended suddenly after a major impact from a celestial object"];
+
   return arrayOfLines[Math.floor(Math.random() * arrayOfLines.length)];
 }
+
 function displayEncodedMessage(message) {
   const encodedAlphabets = encodingAlphabets();
   const alphabets = "abcdefghijklmnopqrstuvwxyz".split("");
@@ -86,52 +82,65 @@ function displayEncodedMessage(message) {
 
   return encodedstring.join("");
 }
-function isBothArrayLengthEqual(array1, array2) {
-  return array1.length === array2.length;
+
+function isArray(x) {
+  return typeof x === 'object';
 }
 
-function isArrayIndexEqual(array1, array2, index) {
-  return array1[index] === array2[index];
-}
-
-function areEqual(array1, array2) {
-
-  let booleanValue = isBothArrayLengthEqual(array1, array2);
-
-  for (let index = 0; index < array1.length; index++) {    
-    booleanValue = booleanValue && isArrayIndexEqual(array1, array2, index);
+function areArraysEqual(array1, array2) {
+  if (array1.length !== array2.length) {
+    return "Invalid entered";
   }
 
-  return booleanValue;
+  for (let index = 0; index < array1.length; index++) {
+    if (!areDeepEqual(array1[index], array2[index])) {
+      return "Invalid Entered";
+    }
+  }
+
+  return "YOU WON!!";
+}
+
+function areDeepEqual(array1, array2) {
+  if (typeof array1 !== typeof array2) {
+    return "Invalid characters entered";
+  }
+  if (isArray(array1) && isArray(array2)) {
+    return areArraysEqual(array1, array2);
+  }
+  if (array1 === array2) {
+    return "YOU WON!!";
+  }
+
 }
 
 function play() {
   instructions();
-  const message = secretMessage().toLowerCase().split("");  
-  
-  const decodedMessage = message; 
-  console.log(decodedMessage);
-
+  let message = secretMessage();
+  const decodedMessage = message.toLowerCase().split("");
+  message = message.toLowerCase().split("");
   const secretScript = displayEncodedMessage(message);
+  let flag = 0;
+  
   console.log(secretScript);
-  // console.log(message);
-
-  
-  
   for (let move = 0; move < 10; move++) {
     const guessArray = userGuess();
-      console.log(guessArray);
-        
-    
-    if (displayInvalid(guessArray, secretScript, message)) {
-      const check = areEqual(guessArray, decodedMessage);
-      
-      return check;   
-    }
-  }
-  return console.log("YOU LOST!!");
-  
-}
+    if (isEntered5(guessArray) && flag === 0) {
+      console.log(hint(message, decodedMessage).join(""));
+      flag = 1;
+    } else {
+      let statement = areDeepEqual(guessArray, decodedMessage);
+      console.log(statement);
 
+      if (statement === "YOU WON!!") {
+        return;
+      }
+    }
+
+  }
+  console.log(decodedMessage.join(""));
+  
+  return console.log("YOU LOST!!");
+}
 
 play();
