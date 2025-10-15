@@ -125,13 +125,15 @@ function play() {
   console.log("\n\n\t\t\tTHE ENCODED MESSAGE IS\t\t\t\n\n", secretScript);
   for (let move = 0; move < 10; move++) {
     const guessArray = userGuess();
-    statement = areDeepEqual(guessArray, decodedMessage);
-    console.log(statement);
 
     if (isEntered5(guessArray) && flag === 0) {
       console.log(hint(message, decodedMessage).join(""));
       flag = 1;
     }
+
+    statement = areDeepEqual(guessArray, decodedMessage);
+    console.log(statement);
+
     if (flag === 0 && statement === "YOU WON!!") {
       console.log("\nYOU GOT BONUS 100 POINTS\n");
       return;
