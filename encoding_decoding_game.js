@@ -75,7 +75,7 @@ function secretMessage() {
   return arrayOfLines[Math.floor(Math.random() * arrayOfLines.length)];
 }
 
-function displayEncodedMessage(message) {
+function processEncodedMessage(message) {
   const encodedAlphabets = encodingAlphabets();
   const alphabets = "abcdefghijklmnopqrstuvwxyz".split("");
   let encodedstring = encodingString(message, encodedAlphabets, alphabets);
@@ -111,7 +111,6 @@ function areDeepEqual(array1, array2) {
   if (array1 === array2) {
     return "YOU WON!!";
   }
-
 }
 
 function play() {
@@ -119,27 +118,31 @@ function play() {
   let message = secretMessage();
   const decodedMessage = message.toLowerCase().split("");
   message = message.toLowerCase().split("");
-  const secretScript = displayEncodedMessage(message);
+  const secretScript = processEncodedMessage(message);
+  let statement = "";
   let flag = 0;
-  
-  console.log(secretScript);
+
+  console.log("\n\n\t\t\tTHE ENCODED MESSAGE IS\t\t\t\n\n", secretScript);
   for (let move = 0; move < 10; move++) {
     const guessArray = userGuess();
+    statement = areDeepEqual(guessArray, decodedMessage);
+    console.log(statement);
+
     if (isEntered5(guessArray) && flag === 0) {
       console.log(hint(message, decodedMessage).join(""));
       flag = 1;
-    } else {
-      let statement = areDeepEqual(guessArray, decodedMessage);
-      console.log(statement);
-
-      if (statement === "YOU WON!!") {
-        return;
-      }
+    }
+    if (flag === 0 && statement === "YOU WON!!") {
+      console.log("\nYOU GOT BONUS 100 POINTS\n");
+      return;
+    }
+    if (statement === "YOU WON!!") {
+      return;
     }
 
   }
   console.log(decodedMessage.join(""));
-  
+
   return console.log("YOU LOST!!");
 }
 
