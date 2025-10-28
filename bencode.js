@@ -2,34 +2,36 @@ function userInfo() {
   const information = prompt("Enter any information:");
   return information;
 }
+
 function isNumber(value) {
   return !isNaN(value);
 }
+
 function encodeNumber(value) {
   return `i${value}e`;
 }
+
 function isStringOrList(information) {
   return information.startsWith('[') && information.endsWith(']') ? encodeList(information) :
     encodeString(information);
 }
+
 function encodeString(value) {
   return `${value.length}:${value}`;
 }
+
+function encodeValue(value) {
+  if (isNumber(value)) return encodeNumber(value);
+  if (value === "[") return "l";
+  if (value === "]") return "e";
+  return encodeString(value);
+}
+
 function encodeList(value) {
-  let list = spliceApplied(value).split(",");
+  const list = spliceApplied(value).split(",");
+
   for (let i = 0; i < list.length; i++) {
-    if (isNumber(parseInt(list[i]))) {
-      list[i] = encodeNumber(list[i]);
-    }
-    else if (list[i] === "[") {
-      list[i] = "l";
-    }
-    else if (list[i] === "]") {
-      list[i] = "e";
-    }
-    else if (!isNumber(parseInt(list[i]))) {
-      list[i] = encodeString(list[i]);
-    }
+    list[i] = encodeValue(list[i]);
   }
   return list.join("");
 }
