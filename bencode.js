@@ -53,11 +53,7 @@ function spliceApplied(value) {
 
 function encode() {
   const information = userInfo();
-  for (let i = 0; i < information.length; i++) {
-    if (!isNumber(parseInt(information[i]))) {
-      return isStringOrList(information);
-    }
-  }
-  return encodeNumber(information)
+  return isNumber(information) ? encodeNumber(information) : 
+  isStringOrList(information);
 }
 encode();
