@@ -38,14 +38,16 @@ function encodeList(value) {
 function spliceApplied(value) {
   let splicedValue = "";
   for (let i = 0; i < value.length - 1; i++) {
-    if (value[i] === "[") {
-      splicedValue += value[i] + ",";
-    }
-    else if (value[i] === "]") {
-      splicedValue += "," + value[i];
-    }
-    else {
-      splicedValue += value[i];
+    switch (value[i]) {
+      case "[":
+        splicedValue += value[i] + ",";
+        break;
+      case "]":
+        splicedValue += "," + value[i];
+        break;
+      default:
+        splicedValue += value[i];
+        break;
     }
   }
   return splicedValue + ",]";
@@ -53,7 +55,7 @@ function spliceApplied(value) {
 
 function encode() {
   const information = userInfo();
-  return isNumber(information) ? encodeNumber(information) : 
-  isStringOrList(information);
+  return isNumber(information) ? encodeNumber(information) :
+    isStringOrList(information);
 }
 encode();
