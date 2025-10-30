@@ -29,28 +29,27 @@ function encodeValue(value) {
 
 function encodeList(value) {
   const list = spliceApplied(value).split(",");
-
+  console.log(list);
+  
   for (let i = 0; i < list.length; i++) {
     list[i] = encodeValue(list[i]);
   }
   return list.join("");
 }
-function spliceApplied(value) {
-  let splicedValue = "";
-  for (let i = 0; i < value.length - 1; i++) {
-    switch (value[i]) {
-      case "[":
-        splicedValue += value[i] + ",";
-        break;
-      case "]":
-        splicedValue += "," + value[i];
-        break;
-      default:
-        splicedValue += value[i];
-        break;
-    }
-  }
-  return splicedValue + ",]";
+
+function handleChar(value) {
+if (value === '[') return value + ',';
+if (value === ']') return ',' + value;
+
+return value;
+}
+
+function spliceApplied(value, index = 0) {
+  const char = value[index];
+
+  if (index+1 === value.length) return ",]";
+
+  return handleChar(char) + spliceApplied(value, index + 1);
 }
 
 function encode() {
